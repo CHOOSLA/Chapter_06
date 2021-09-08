@@ -7,10 +7,8 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -692,8 +690,16 @@ public class SearchCrawler extends JFrame {
 
     public void crawl(String startUrl,int maxUrls,boolean limitHost,String searchString,boolean caseSensitive) {
         //크롤링 작업에 필요한 리스트 설정
-        HashSet crawledList = new HashSet();
+
+        //LinkedHashSet을 사용하는 이유?
         LinkedHashSet toCrawlList = new LinkedHashSet();
+
+        //thread-safe한 ConcurrentHashMap을 가지고 set으로 설정함
+        //여기서 key값은 String이 되고 Value는 의미 없는 값이 됨
+        Set<String> crawledList = ConcurrentHashMap.<String>newKeySet();
+
+
+
 
         //크롤링할 리스트에 시작 페이지 URL추가
         toCrawlList.add(startUrl);
@@ -706,6 +712,8 @@ public class SearchCrawler extends JFrame {
                     break;
                 }
             }
+
+            //이것은 약한 연결이기 때문에 멀티 쓰레딩 영역에서 사용할 수 없음
             //크롤링할 리스트에서 현재 처리할 URL을 얻음
             String url = (String) toCrawlList.iterator().next();
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<project name ="fist_build" default="package">
+
+    <target name="init">
+    </target>
+
+    <target name="checkout">
+    </target>
+
+    <target name="compile" description="Compile Java Code">
+    </target>
+
+    <target name="package" depends="compile" description="Generate JAR file"></target>
+
+    <target name="deploy" depends="compile"></target>
+
+    <target name="clean" description="Deletes generated directories"></target>
+
+</project>
